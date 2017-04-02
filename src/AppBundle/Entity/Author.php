@@ -4,10 +4,12 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * Author
  *
  * @ORM\Table(name="author")
+ * @UniqueEntity("name")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\AuthorRepository")
  */
 class Author

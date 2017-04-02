@@ -25,6 +25,7 @@ class ArticleController extends FOSRestController
     public function listAction()
     {
         $result = [
+            'code' => Response::HTTP_NOT_ACCEPTABLE,
             'status' => $this::TYPE_RESPONSE_FAIL,
             'error' => '',
             'data' => []
@@ -35,11 +36,12 @@ class ArticleController extends FOSRestController
 
             $manager = $this->getDoctrine()->getManager();
             $articles = $manager->getRepository('AppBundle:Article')->getArticleWithAuthorName();
-
+            $result['code'] = Response::HTTP_OK;
             $result['status'] = $this::TYPE_RESPONSE_SUCCESS;
             $result['data'] = $articles;
         }catch(Exception $e)
         {
+            $result['code'] = Response::HTTP_UNPROCESSABLE_ENTITY;
             $result['status'] = $this::TYPE_RESPONSE_FAIL;
             $result['error'] = 'Service not available';
         }
@@ -53,6 +55,7 @@ class ArticleController extends FOSRestController
     public function getAction($id)
     {
         $result = [
+            'code' => Response::HTTP_NOT_ACCEPTABLE,
             'status' => $this::TYPE_RESPONSE_FAIL,
             'error' => '',
             'data' => []
@@ -66,11 +69,13 @@ class ArticleController extends FOSRestController
             {
                 $result['status'] = $this::TYPE_RESPONSE_SUCCESS;
                 $result['data']  = $article;
+                $result['code'] = Response::HTTP_OK;
             }else{
                 $result['error'] = 'No article found';
             }
         }catch(Exception $e)
         {
+            $result['code'] = Response::HTTP_UNPROCESSABLE_ENTITY;
             $result['status'] = $this::TYPE_RESPONSE_FAIL;
             $result['error'] = 'Service not available';
         }
@@ -87,6 +92,7 @@ class ArticleController extends FOSRestController
     public function createAction(Request $request)
     {
         $result = [
+            'code' => Response::HTTP_NOT_ACCEPTABLE,
             'status' => $this::TYPE_RESPONSE_FAIL,
             'error' =>'',
             'data' =>[]
@@ -144,6 +150,7 @@ class ArticleController extends FOSRestController
                             'url' => $model->getUrl(),
                             'createdAt' => $model->getCreatedAt()
                         ];
+                        $result['code'] = Response::HTTP_OK;
                         $result['status'] = $this::TYPE_RESPONSE_SUCCESS;
                         $result['data'] = $data;
                     }
@@ -160,6 +167,7 @@ class ArticleController extends FOSRestController
             /**
              * Todo need to log error
              */
+            $result['code'] = Response::HTTP_UNPROCESSABLE_ENTITY;
             $result['status'] = $this::TYPE_RESPONSE_FAIL;
             $result['error'] = 'Service not available';
         }
@@ -176,7 +184,9 @@ class ArticleController extends FOSRestController
     public function updateAction($id,Request $request)
     {
         $result = [
+            'code' => Response::HTTP_NOT_ACCEPTABLE,
             'status' => $this::TYPE_RESPONSE_FAIL,
+            'data' => [],
             'error' =>''
         ];
 
@@ -238,6 +248,7 @@ class ArticleController extends FOSRestController
                         'url' => $model->getUrl(),
                         'createdAt' => $model->getCreatedAt()
                     ];
+                    $result['code'] = Response::HTTP_OK;
                     $result['status'] = $this::TYPE_RESPONSE_SUCCESS;
                     $result['data'] = $data;
                 }
@@ -247,6 +258,7 @@ class ArticleController extends FOSRestController
             }
         }catch(Exception $e)
         {
+            $result['code'] = Response::HTTP_UNPROCESSABLE_ENTITY;
             $result['status'] = $this::TYPE_RESPONSE_FAIL;
             $result['error'] = 'Service not available';
         }
@@ -261,6 +273,7 @@ class ArticleController extends FOSRestController
     public function deleteAction($id)
     {
         $result = [
+            'code' => Response::HTTP_NOT_ACCEPTABLE,
             'status' => $this::TYPE_RESPONSE_FAIL,
             'error' => '',
             'data' => []
@@ -275,12 +288,13 @@ class ArticleController extends FOSRestController
                 $em->remove($article);
                 $em->flush();
                 $result['status'] = $this::TYPE_RESPONSE_SUCCESS;
-
+                $result['code'] = Response::HTTP_OK;
             }else{
                 $result['error'] = 'No article found';
             }
         }catch(Exception $e)
         {
+            $result['code'] = Response::HTTP_UNPROCESSABLE_ENTITY;
             $result['status'] = $this::TYPE_RESPONSE_FAIL;
             $result['error'] = 'Service not available';
         }

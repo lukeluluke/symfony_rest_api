@@ -26,6 +26,7 @@ class AuthorController extends FOSRestController
     public function createAction(Request $request)
     {
         $result = [
+            'code' => Response::HTTP_NOT_ACCEPTABLE,
             'status' => $this::TYPE_RESPONSE_FAIL,
             'error' =>'',
             'data' =>[]
@@ -60,6 +61,7 @@ class AuthorController extends FOSRestController
                         'id' => $model->getId(),
                         'name' => $model->getName()
                     ];
+                    $result['code'] = Response::HTTP_OK;
                     $result['status'] = $this::TYPE_RESPONSE_SUCCESS;
                     $result['data'] = $data;
                 }
@@ -72,6 +74,7 @@ class AuthorController extends FOSRestController
             /**
              * Todo need to log error
              */
+            $result['code'] = Response::HTTP_UNPROCESSABLE_ENTITY;
         }
 
         return $result;
