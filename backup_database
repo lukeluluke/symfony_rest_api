@@ -1,0 +1,17 @@
+#!/bin/bash
+# Setup database
+ user=""
+ password=""
+ host="127.0.0.1"
+ db_name="symfony"
+# setup backup path and file name
+if [ ! -d opt/backups/database ]; 
+then
+  mkdir -p opt/backups/database;
+fi
+ backup_path="opt/backups/database"
+ date=$(date +"%d-%b-%Y")
+# Set file permissions
+ umask 177
+# Dump database
+mysqldump --user=$user --password=$password --host=$host $db_name > $backup_path/$db_name-$date.sql
