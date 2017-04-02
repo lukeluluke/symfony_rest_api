@@ -10,4 +10,21 @@ namespace AppBundle\Repository;
  */
 class ArticleRepository extends \Doctrine\ORM\EntityRepository
 {
+	public function getArticleWithAuthorName($article_id=null)
+	{
+		$query = $this->createQueryBuilder('a')
+			->select('a.id,a.title,Author.name as author,a.content as summary,a.url,a.createdAt')
+			->leftJoin('a.author', 'Author')
+			->orderBy('a.id','ASC');
+
+		if($article_id!=null)
+		{
+			$query->where('a.id=:id');
+			$query->setParameter('id',$article_id);
+		}
+
+
+
+		return $query->getQuery()->getResult();
+	}
 }
